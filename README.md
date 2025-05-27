@@ -40,15 +40,36 @@ heater_click/
 ## 🛠️ 安装依赖
 
 ```bash
-pip install torch torchaudio transformers scikit-learn matplotlib seaborn pyaudio
+pip install torch torchaudio transformers scikit-learn matplotlib seaborn pyaudio requests
 ```
+
+## ⚠️ 重要说明
+
+**模型文件处理**: 由于训练好的模型文件(`switch_detector_model.pth`)大小为361MB，超过GitHub的100MB限制，因此未包含在Git仓库中。
 
 ## 🎯 快速开始
 
-### 1. 训练模型
+### 1. 获取模型文件
+
+**选项A: 下载预训练模型**
+```bash
+# 运行模型下载脚本 (如果可用)
+python download_model.py
+```
+
+**选项B: 训练新模型**
+```bash
+# 准备音频数据 (将6个m4a文件放在项目根目录)
+python convert_audio.py
+
+# 训练模型
+python wav2vec2_switch_detector.py
+```
+
+### 2. 实时检测
 
 ```bash
-python wav2vec2_switch_detector.py
+python realtime_mic_detector.py
 ```
 
 训练过程：
