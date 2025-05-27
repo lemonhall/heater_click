@@ -1,0 +1,9 @@
+# 热水器开关声音标签文件
+# 格式: 文件名,标签 (1=有开关按下, 0=无开关按下)
+filename,label
+switch_on_01.wav,1
+switch_on_02.wav,1
+switch_on_03.wav,1
+switch_on_04.wav,1
+switch_on_05.wav,1
+switch_on_06.wav,1
