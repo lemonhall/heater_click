@@ -31,16 +31,20 @@ heater_click/
 │   └── samples_wav/                 # 转换后的wav文件
 │       ├── switch_on_01.wav ~ switch_on_06.wav  # 开关声音
 │       └── background_01.wav ~ background_06.wav # 背景噪音
-└── 📈 分析结果
-    ├── confusion_matrix.png         # 混淆矩阵
-    ├── analysis_plots/              # 音频分析图表
-    └── wav2vec2_*.png              # 架构说明图
+├── 📈 分析结果
+│   ├── confusion_matrix.png         # 混淆矩阵
+│   ├── analysis_plots/              # 音频分析图表
+│   └── wav2vec2_*.png              # 架构说明图
+└── 🤗 Hugging Face集成
+    ├── README_HF.md                 # Hugging Face模型卡片
+    ├── upload_to_hf.py              # 模型上传脚本
+    └── download_model.py            # 模型下载脚本
 ```
 
 ## 🛠️ 安装依赖
 
 ```bash
-pip install torch torchaudio transformers scikit-learn matplotlib seaborn pyaudio requests
+pip install torch torchaudio transformers scikit-learn matplotlib seaborn pyaudio requests huggingface_hub
 ```
 
 ## ⚠️ 重要说明
@@ -51,10 +55,14 @@ pip install torch torchaudio transformers scikit-learn matplotlib seaborn pyaudi
 
 ### 1. 获取模型文件
 
-**选项A: 下载预训练模型**
+**选项A: 从Hugging Face下载预训练模型 (推荐)**
 ```bash
-# 运行模型下载脚本 (如果可用)
+# 使用下载脚本
 python download_model.py
+
+# 或者直接使用Python代码
+from huggingface_hub import hf_hub_download
+model_path = hf_hub_download('lemonhall/heater-switch-detector', 'switch_detector_model.pth')
 ```
 
 **选项B: 训练新模型**
@@ -72,24 +80,79 @@ python wav2vec2_switch_detector.py
 python realtime_mic_detector.py
 ```
 
-训练过程：
-- 自动加载6个开关声音样本
-- 生成6个背景噪音负样本
-- 使用Wav2Vec2进行特征提取
-- 训练二分类器(开关 vs 背景)
-- 保存模型到 `switch_detector_model.pth`
+## 🤗 Hugging Face模型
 
-### 2. 实时检测
+我们的训练好的模型已经上传到Hugging Face Hub：
 
-```bash
-python realtime_mic_detector.py
+**🔗 模型地址**: https://huggingface.co/lemonhall/heater-switch-detector
+
+### 使用Hugging Face模型
+
+```python
+from huggingface_hub import hf_hub_download
+import torch
+import torchaudio
+from transformers import Wav2Vec2Model
+
+# 下载模型
+model_path = hf_hub_download(
+    repo_id='lemonhall/heater-switch-detector',
+    filename='switch_detector_model.pth'
+)
+
+# 加载模型
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+checkpoint = torch.load(model_path, map_location=device)
+
+# 重建模型架构
+wav2vec2_model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base")
+classifier = torch.nn.Sequential(
+    torch.nn.Linear(768, 256),
+    torch.nn.ReLU(),
+    torch.nn.Dropout(0.3),
+    torch.nn.Linear(256, 2)
+)
+
+# 加载权重
+classifier.load_state_dict(checkpoint['classifier_state_dict'])
+classifier.eval()
+wav2vec2_model.eval()
+
+# 预测函数
+def predict_audio(audio_path):
+    waveform, sample_rate = torchaudio.load(audio_path)
+    
+    # 重采样到16kHz
+    if sample_rate != 16000:
+        resampler = torchaudio.transforms.Resample(sample_rate, 16000)
+        waveform = resampler(waveform)
+    
+    # 转为单声道
+    if waveform.shape[0] > 1:
+        waveform = waveform.mean(dim=0, keepdim=True)
+    
+    # 特征提取和预测
+    with torch.no_grad():
+        features = wav2vec2_model(waveform).last_hidden_state
+        pooled_features = features.mean(dim=1)
+        logits = classifier(pooled_features)
+        probabilities = torch.softmax(logits, dim=-1)
+        prediction = torch.argmax(probabilities, dim=-1)
+    
+    return {
+        'prediction': '开关按下' if prediction.item() == 1 else '背景声音',
+        'confidence': probabilities.max().item(),
+        'probabilities': {
+            '背景声音': probabilities[0][0].item(),
+            '开关按下': probabilities[0][1].item()
+        }
+    }
+
+# 使用示例
+result = predict_audio("test_audio.wav")
+print(f"预测结果: {result['prediction']}")
+print(f"置信度: {result['confidence']:.3f}")
 ```
-
-功能特点：
-- 实时麦克风音频流处理
-- 3秒滑动窗口检测
-- 置信度阈值过滤
-- 防重复检测机制
 
 ## 🧠 技术原理
 
@@ -215,6 +278,10 @@ RealtimeSwitchDetector(
 
 欢迎提交Issue和Pull Request来改进这个项目！
 
-## �� 许可证
+## 📄 许可证
 
-MIT License 
+MIT License
+
+---
+
+**🎉 现在你可以直接从Hugging Face使用我们的预训练模型，无需本地训练！** 

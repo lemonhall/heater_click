@@ -70,6 +70,32 @@ def verify_model_file(filepath, expected_hash=None):
     print("✅ 模型文件验证通过")
     return True
 
+def download_from_huggingface(repo_id):
+    """从Hugging Face Hub下载模型"""
+    
+    try:
+        from huggingface_hub import hf_hub_download
+        
+        print(f"📥 从Hugging Face下载模型: {repo_id}")
+        
+        model_path = hf_hub_download(
+            repo_id=repo_id,
+            filename="switch_detector_model.pth",
+            local_dir=".",
+            local_dir_use_symlinks=False
+        )
+        
+        print(f"✅ 下载完成: {model_path}")
+        return True
+        
+    except ImportError:
+        print("❌ 需要安装huggingface_hub:")
+        print("   pip install huggingface_hub")
+        return False
+    except Exception as e:
+        print(f"❌ 下载失败: {e}")
+        return False
+
 def download_pretrained_model():
     """下载预训练模型"""
     
@@ -90,19 +116,14 @@ def download_pretrained_model():
     # 模型下载选项
     download_options = [
         {
-            "name": "Google Drive (推荐)",
-            "url": "https://drive.google.com/uc?id=YOUR_GOOGLE_DRIVE_FILE_ID",
-            "description": "从Google Drive下载，速度较快"
+            "name": "Hugging Face Hub (推荐)",
+            "repo_id": "lemonhall/heater-switch-detector",
+            "description": "从Hugging Face模型库下载，支持大文件 - 已上传成功！"
         },
         {
-            "name": "GitHub Releases",
-            "url": "https://github.com/YOUR_USERNAME/heater_click/releases/download/v1.0/switch_detector_model.pth",
-            "description": "从GitHub Releases下载"
-        },
-        {
-            "name": "Hugging Face Hub",
-            "url": "https://huggingface.co/YOUR_USERNAME/heater-switch-detector/resolve/main/switch_detector_model.pth",
-            "description": "从Hugging Face模型库下载"
+            "name": "自定义Hugging Face仓库",
+            "repo_id": "custom",
+            "description": "输入自定义的Hugging Face仓库ID"
         }
     ]
     
@@ -115,13 +136,31 @@ def download_pretrained_model():
     print(f"   - 需要稳定的网络连接")
     print(f"   - 下载完成后会自动验证文件完整性")
     
-    # 这里可以添加实际的下载逻辑
-    print(f"\n❌ 当前版本暂未配置下载源")
-    print(f"   请手动下载模型文件并放置在项目根目录")
-    print(f"   或者运行训练脚本生成模型:")
-    print(f"   python wav2vec2_switch_detector.py")
+    # 选择下载源
+    choice = input(f"\n请选择下载源 (1-{len(download_options)}): ").strip()
     
-    return False
+    try:
+        choice_idx = int(choice) - 1
+        if 0 <= choice_idx < len(download_options):
+            option = download_options[choice_idx]
+            
+            if option["repo_id"] == "custom":
+                repo_id = input("请输入Hugging Face仓库ID (格式: username/repo-name): ").strip()
+                if not repo_id or '/' not in repo_id:
+                    print("❌ 无效的仓库ID格式")
+                    return False
+            else:
+                repo_id = option["repo_id"]
+            
+            print(f"\n🚀 开始从 {repo_id} 下载...")
+            return download_from_huggingface(repo_id)
+        else:
+            print("❌ 无效选择")
+            return False
+            
+    except ValueError:
+        print("❌ 请输入有效数字")
+        return False
 
 def setup_model():
     """设置模型文件"""
