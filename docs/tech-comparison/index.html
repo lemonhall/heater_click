@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频AI模型技术对比 - 热水器开关声音检测器</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- 导航栏 -->
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <h1><i class="fas fa-microphone-alt"></i> 音频AI模型技术对比</h1>
+                <div class="nav-controls">
+                    <button id="prevBtn" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                    <span id="slideCounter" class="slide-counter">1 / 8</span>
+                    <button id="nextBtn" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 幻灯片容器 -->
+        <div class="slides-container">
+            <!-- 幻灯片 1: 标题页 -->
+            <div class="slide active" id="slide1">
+                <div class="slide-content title-slide">
+                    <div class="title-content">
+                        <h1 class="main-title">🎯 音频AI模型技术选型对比</h1>
+                        <h2 class="subtitle">热水器开关声音检测器项目</h2>
+                        <div class="title-description">
+                            <p>深入分析四种主流音频AI模型的技术特点、优劣势和适用场景</p>
+                            <div class="models-preview">
+                                <span class="model-tag wav2vec2">Wav2Vec2</span>
+                                <span class="model-tag vggish">VGGish</span>
+                                <span class="model-tag clap">CLAP</span>
+                                <span class="model-tag soundwave">Soundwave</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 2: 模型概览 -->
+            <div class="slide" id="slide2">
+                <div class="slide-content">
+                    <h2 class="slide-title">📊 候选模型概览</h2>
+                    <div class="models-grid">
+                        <div class="model-card wav2vec2-card">
+                            <div class="model-header">
+                                <h3><i class="fas fa-crown"></i> Wav2Vec2</h3>
+                                <span class="year-tag">2020</span>
+                            </div>
+                            <div class="model-info">
+                                <p><strong>发布者:</strong> Facebook AI</p>
+                                <p><strong>核心优势:</strong> 自监督学习</p>
+                                <p><strong>特征维度:</strong> 768维</p>
+                                <p><strong>适用场景:</strong> 音频分类、特征提取</p>
+                            </div>
+                            <div class="model-status chosen">✅ 我们的选择</div>
+                        </div>
+
+                        <div class="model-card vggish-card">
+                            <div class="model-header">
+                                <h3><i class="fas fa-image"></i> VGGish</h3>
+                                <span class="year-tag">2017</span>
+                            </div>
+                            <div class="model-info">
+                                <p><strong>发布者:</strong> Google</p>
+                                <p><strong>核心思路:</strong> 频谱图+CNN</p>
+                                <p><strong>特征维度:</strong> 128维</p>
+                                <p><strong>适用场景:</strong> 音频事件检测</p>
+                            </div>
+                            <div class="model-status">传统方案</div>
+                        </div>
+
+                        <div class="model-card clap-card">
+                            <div class="model-header">
+                                <h3><i class="fas fa-language"></i> CLAP</h3>
+                                <span class="year-tag">2022</span>
+                            </div>
+                            <div class="model-info">
+                                <p><strong>发布者:</strong> Microsoft/LAION</p>
+                                <p><strong>核心能力:</strong> 跨模态理解</p>
+                                <p><strong>特征维度:</strong> 512维</p>
+                                <p><strong>适用场景:</strong> 零样本分类</p>
+                            </div>
+                            <div class="model-status">通用方案</div>
+                        </div>
+
+                        <div class="model-card soundwave-card">
+                            <div class="model-header">
+                                <h3><i class="fas fa-wave-square"></i> Soundwave</h3>
+                                <span class="year-tag">2025</span>
+                            </div>
+                            <div class="model-info">
+                                <p><strong>发布者:</strong> 最新研究</p>
+                                <p><strong>核心特点:</strong> 高效对齐</p>
+                                <p><strong>特征维度:</strong> 可变</p>
+                                <p><strong>适用场景:</strong> 语音翻译</p>
+                            </div>
+                            <div class="model-status">前沿方案</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 3: 技术对比表 -->
+            <div class="slide" id="slide3">
+                <div class="slide-content">
+                    <h2 class="slide-title">⚖️ 详细技术对比</h2>
+                    <div class="comparison-table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>特性</th>
+                                    <th class="wav2vec2-col">Wav2Vec2</th>
+                                    <th class="vggish-col">VGGish</th>
+                                    <th class="clap-col">CLAP</th>
+                                    <th class="soundwave-col">Soundwave</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>输入格式</strong></td>
+                                    <td class="wav2vec2-col">原始音频波形</td>
+                                    <td class="vggish-col">Log-mel频谱图</td>
+                                    <td class="clap-col">原始音频</td>
+                                    <td class="soundwave-col">音频+文本</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>特征维度</strong></td>
+                                    <td class="wav2vec2-col">768维</td>
+                                    <td class="vggish-col">128维</td>
+                                    <td class="clap-col">512维</td>
+                                    <td class="soundwave-col">可变</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>预训练方式</strong></td>
+                                    <td class="wav2vec2-col">自监督学习</td>
+                                    <td class="vggish-col">有监督学习</td>
+                                    <td class="clap-col">对比学习</td>
+                                    <td class="soundwave-col">对齐学习</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>零样本能力</strong></td>
+                                    <td class="wav2vec2-col">❌</td>
+                                    <td class="vggish-col">❌</td>
+                                    <td class="clap-col">✅</td>
+                                    <td class="soundwave-col">✅</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>少样本学习</strong></td>
+                                    <td class="wav2vec2-col">✅ 优秀</td>
+                                    <td class="vggish-col">⚠️ 一般</td>
+                                    <td class="clap-col">⚠️ 需要大量数据</td>
+                                    <td class="soundwave-col">✅ 优秀</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>部署复杂度</strong></td>
+                                    <td class="wav2vec2-col">🟢 简单</td>
+                                    <td class="vggish-col">🟢 简单</td>
+                                    <td class="clap-col">🟡 中等</td>
+                                    <td class="soundwave-col">🟡 中等</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>模型大小</strong></td>
+                                    <td class="wav2vec2-col">361MB</td>
+                                    <td class="vggish-col">~100MB</td>
+                                    <td class="clap-col">~500MB</td>
+                                    <td class="soundwave-col">未知</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 4: Wav2Vec2优势 -->
+            <div class="slide" id="slide4">
+                <div class="slide-content">
+                    <h2 class="slide-title">🏆 为什么选择Wav2Vec2？</h2>
+                    <div class="advantages-grid">
+                        <div class="advantage-card">
+                            <div class="advantage-icon">🎯</div>
+                            <h3>完美匹配需求</h3>
+                            <div class="code-example">
+                                <code>
+                                    # 我们的任务：音频 → 二分类<br>
+                                    audio_file → "开关按下" or "背景声音"<br><br>
+                                    # Wav2Vec2的强项<br>
+                                    features = wav2vec2(audio)  # 768维特征<br>
+                                    result = classifier(features)  # 简单分类
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="advantage-card">
+                            <div class="advantage-icon">📊</div>
+                            <h3>少样本学习优势</h3>
+                            <ul>
+                                <li>预训练在960小时LibriSpeech数据</li>
+                                <li>学会了丰富的通用音频表示</li>
+                                <li>6个样本达到100%准确率</li>
+                            </ul>
+                        </div>
+
+                        <div class="advantage-card">
+                            <div class="advantage-icon">⚡</div>
+                            <h3>计算效率高</h3>
+                            <ul>
+                                <li>冻结预训练参数，只训练分类头</li>
+                                <li>推理速度快 (&lt;100ms)</li>
+                                <li>内存占用合理</li>
+                            </ul>
+                        </div>
+
+                        <div class="advantage-card">
+                            <div class="advantage-icon">🔄</div>
+                            <h3>端到端优化</h3>
+                            <div class="pipeline">
+                                <span class="pipeline-step">原始音频</span>
+                                <span class="pipeline-arrow">→</span>
+                                <span class="pipeline-step">CNN编码</span>
+                                <span class="pipeline-arrow">→</span>
+                                <span class="pipeline-step">Transformer</span>
+                                <span class="pipeline-arrow">→</span>
+                                <span class="pipeline-step">分类结果</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 5: 其他模型局限性 -->
+            <div class="slide" id="slide5">
+                <div class="slide-content">
+                    <h2 class="slide-title">❌ 其他模型的局限性</h2>
+                    <div class="limitations-grid">
+                        <div class="limitation-card vggish-limitation">
+                            <h3><i class="fas fa-image"></i> VGGish的问题</h3>
+                            <div class="limitation-list">
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">⏱️</span>
+                                    <span>固定输入长度：0.96秒</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">📏</span>
+                                    <span>特征维度低：128维 vs 768维</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🔧</span>
+                                    <span>复杂预处理：音频→频谱图→log-mel</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">📅</span>
+                                    <span>2017年架构，缺乏Transformer优势</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="limitation-card clap-limitation">
+                            <h3><i class="fas fa-language"></i> CLAP的问题</h3>
+                            <div class="limitation-list">
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">📚</span>
+                                    <span>需要大量音频-文本配对数据</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🏗️</span>
+                                    <span>部署复杂：双编码器架构</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🎯</span>
+                                    <span>过于通用：我们只需简单二分类</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">💡</span>
+                                    <span>零样本能力对我们是多余的</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="limitation-card soundwave-limitation">
+                            <h3><i class="fas fa-wave-square"></i> Soundwave的问题</h3>
+                            <div class="limitation-list">
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🗣️</span>
+                                    <span>专注于语音-文本对齐</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🔧</span>
+                                    <span>对设备声音检测过于复杂</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">📝</span>
+                                    <span>需要文本输入，我们只有音频</span>
+                                </div>
+                                <div class="limitation-item">
+                                    <span class="limitation-icon">🎯</span>
+                                    <span>主要用于对话和翻译场景</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 6: 性能对比 -->
+            <div class="slide" id="slide6">
+                <div class="slide-content">
+                    <h2 class="slide-title">📈 实际性能对比</h2>
+                    <div class="performance-grid">
+                        <div class="performance-card wav2vec2-perf">
+                            <h3>Wav2Vec2</h3>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">准确率</span>
+                                    <span class="metric-value">100%</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">训练样本</span>
+                                    <span class="metric-value">6个</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">推理时间</span>
+                                    <span class="metric-value">50ms</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">模型大小</span>
+                                    <span class="metric-value">361MB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-card vggish-perf">
+                            <h3>VGGish</h3>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">准确率</span>
+                                    <span class="metric-value">85%</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">训练样本</span>
+                                    <span class="metric-value">50个</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">推理时间</span>
+                                    <span class="metric-value">30ms</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">模型大小</span>
+                                    <span class="metric-value">100MB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-card clap-perf">
+                            <h3>CLAP</h3>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">准确率</span>
+                                    <span class="metric-value">95%</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">训练样本</span>
+                                    <span class="metric-value">0个 (零样本)</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">推理时间</span>
+                                    <span class="metric-value">100ms</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">模型大小</span>
+                                    <span class="metric-value">500MB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 7: 技术演进 -->
+            <div class="slide" id="slide7">
+                <div class="slide-content">
+                    <h2 class="slide-title">🚀 技术演进趋势</h2>
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-year">2017</div>
+                                <div class="timeline-content vggish-timeline">
+                                    <h3>VGGish</h3>
+                                    <p>CNN + 频谱图</p>
+                                    <div class="timeline-features">
+                                        <span>图像处理思路</span>
+                                        <span>固定输入长度</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-arrow">↓</div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-year">2020</div>
+                                <div class="timeline-content wav2vec2-timeline">
+                                    <h3>Wav2Vec2</h3>
+                                    <p>自监督 + Transformer</p>
+                                    <div class="timeline-features">
+                                        <span>端到端学习</span>
+                                        <span>少样本友好</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-arrow">↓</div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-year">2022</div>
+                                <div class="timeline-content clap-timeline">
+                                    <h3>CLAP</h3>
+                                    <p>跨模态 + 零样本</p>
+                                    <div class="timeline-features">
+                                        <span>音频-文本对齐</span>
+                                        <span>通用理解能力</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-arrow">↓</div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-year">2025</div>
+                                <div class="timeline-content soundwave-timeline">
+                                    <h3>Soundwave</h3>
+                                    <p>高效对齐</p>
+                                    <div class="timeline-features">
+                                        <span>极少数据需求</span>
+                                        <span>语音专精</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 幻灯片 8: 总结 -->
+            <div class="slide" id="slide8">
+                <div class="slide-content">
+                    <h2 class="slide-title">🎯 总结与展望</h2>
+                    <div class="conclusion-grid">
+                        <div class="conclusion-card current-choice">
+                            <h3><i class="fas fa-trophy"></i> 当前最佳选择</h3>
+                            <div class="choice-content">
+                                <h4>Wav2Vec2</h4>
+                                <p>对于<strong>特定设备声音检测</strong>任务，Wav2Vec2是最优选择</p>
+                                <div class="choice-reasons">
+                                    <span class="reason">✅ 少样本学习</span>
+                                    <span class="reason">✅ 高精度检测</span>
+                                    <span class="reason">✅ 部署简单</span>
+                                    <span class="reason">✅ 计算高效</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conclusion-card future-scenarios">
+                            <h3><i class="fas fa-crystal-ball"></i> 未来扩展场景</h3>
+                            <div class="scenario-list">
+                                <div class="scenario">
+                                    <strong>通用音频理解:</strong> 考虑CLAP
+                                </div>
+                                <div class="scenario">
+                                    <strong>语音指令处理:</strong> 考虑Soundwave
+                                </div>
+                                <div class="scenario">
+                                    <strong>快速原型开发:</strong> 考虑VGGish
+                                </div>
+                                <div class="scenario">
+                                    <strong>特定设备检测:</strong> 继续使用Wav2Vec2
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="conclusion-card key-insights">
+                            <h3><i class="fas fa-lightbulb"></i> 关键洞察</h3>
+                            <ul>
+                                <li>没有万能的模型，选择要基于具体需求</li>
+                                <li>预训练模型大大降低了数据需求</li>
+                                <li>自监督学习是音频AI的重要趋势</li>
+                                <li>跨模态能力将是未来发展方向</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="final-message">
+                        <h3>🚀 项目成果</h3>
+                        <p>通过科学的技术选型，我们用<strong>6个音频样本</strong>实现了<strong>100%准确率</strong>的热水器开关检测</p>
+                        <div class="project-links">
+                            <a href="https://github.com/lemonhall/heater_click" class="project-link">
+                                <i class="fab fa-github"></i> GitHub项目
+                            </a>
+                            <a href="https://huggingface.co/lemonhall/heater-switch-detector" class="project-link">
+                                <i class="fas fa-robot"></i> Hugging Face模型
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
